@@ -28,9 +28,9 @@ public class UsuarioService {
         this.direccionRepository = direccionRepository;
     }
 
-    // =========================
+    // =========================================================
     // USUARIOS
-    // =========================
+    // =========================================================
 
     public List<Usuario> obtenerUsuarios() {
         return usuarioRepository.findAll();
@@ -43,15 +43,22 @@ public class UsuarioService {
     public Usuario crearUsuario(Usuario usuario) {
 
         if (usuario.getRol() != null) {
-            Rol rol = rolRepository.findById(usuario.getRol().getId())
-                    .orElseThrow(() -> new RuntimeException("Rol no encontrado"));
+
+            Rol rol = rolRepository
+                    .findById(usuario.getRol().getId())
+                    .orElseThrow(() ->
+                            new RuntimeException("Rol no encontrado"));
+
             usuario.setRol(rol);
         }
 
         if (usuario.getDireccion() != null) {
+
             Direccion direccion = direccionRepository
                     .findById(usuario.getDireccion().getId())
-                    .orElseThrow(() -> new RuntimeException("Dirección no encontrada"));
+                    .orElseThrow(() ->
+                            new RuntimeException("Dirección no encontrada"));
+
             usuario.setDireccion(direccion);
         }
 
@@ -60,7 +67,8 @@ public class UsuarioService {
 
     public Usuario actualizarUsuario(int id, Usuario datos) {
 
-        Usuario usuario = usuarioRepository.findById(id).orElse(null);
+        Usuario usuario =
+                usuarioRepository.findById(id).orElse(null);
 
         if (usuario == null) {
             return null;
@@ -70,20 +78,29 @@ public class UsuarioService {
         usuario.setApellido(datos.getApellido());
         usuario.setCorreo(datos.getCorreo());
 
-        if (datos.getPassword() != null && !datos.getPassword().isBlank()) {
+        if (datos.getPassword() != null
+                && !datos.getPassword().isBlank()) {
+
             usuario.setPassword(datos.getPassword());
         }
 
         if (datos.getRol() != null) {
-            Rol rol = rolRepository.findById(datos.getRol().getId())
-                    .orElseThrow(() -> new RuntimeException("Rol no encontrado"));
+
+            Rol rol = rolRepository
+                    .findById(datos.getRol().getId())
+                    .orElseThrow(() ->
+                            new RuntimeException("Rol no encontrado"));
+
             usuario.setRol(rol);
         }
 
         if (datos.getDireccion() != null) {
+
             Direccion direccion = direccionRepository
                     .findById(datos.getDireccion().getId())
-                    .orElseThrow(() -> new RuntimeException("Dirección no encontrada"));
+                    .orElseThrow(() ->
+                            new RuntimeException("Dirección no encontrada"));
+
             usuario.setDireccion(direccion);
         }
 
@@ -97,15 +114,20 @@ public class UsuarioService {
         }
 
         usuarioRepository.deleteById(id);
+
         return true;
     }
 
-    // =========================
+    // =========================================================
     // ROLES
-    // =========================
+    // =========================================================
 
     public List<Rol> obtenerRoles() {
         return rolRepository.findAll();
+    }
+
+    public Rol obtenerRolPorId(int id) {
+        return rolRepository.findById(id).orElse(null);
     }
 
     public Rol crearRol(Rol rol) {
@@ -114,7 +136,8 @@ public class UsuarioService {
 
     public Rol actualizarRol(int id, Rol datos) {
 
-        Rol rol = rolRepository.findById(id).orElse(null);
+        Rol rol =
+                rolRepository.findById(id).orElse(null);
 
         if (rol == null) {
             return null;
@@ -132,24 +155,32 @@ public class UsuarioService {
         }
 
         rolRepository.deleteById(id);
+
         return true;
     }
 
-    // =========================
+    // =========================================================
     // DIRECCIONES
-    // =========================
+    // =========================================================
 
     public List<Direccion> obtenerDirecciones() {
         return direccionRepository.findAll();
+    }
+
+    public Direccion obtenerDireccionPorId(int id) {
+        return direccionRepository.findById(id).orElse(null);
     }
 
     public Direccion crearDireccion(Direccion direccion) {
         return direccionRepository.save(direccion);
     }
 
-    public Direccion actualizarDireccion(int id, Direccion datos) {
+    public Direccion actualizarDireccion(
+            int id,
+            Direccion datos) {
 
-        Direccion direccion = direccionRepository.findById(id).orElse(null);
+        Direccion direccion =
+                direccionRepository.findById(id).orElse(null);
 
         if (direccion == null) {
             return null;
@@ -170,17 +201,22 @@ public class UsuarioService {
         }
 
         direccionRepository.deleteById(id);
+
         return true;
     }
 
-    // =========================
+    // =========================================================
     // LOGIN
-    // =========================
+    // =========================================================
 
-    public Usuario iniciarSesion(String correo, String password) {
+    public Usuario iniciarSesion(
+            String correo,
+            String password) {
 
-        return usuarioRepository.findByCorreoIgnoreCase(correo)
-                .filter(usuario -> usuario.getPassword().equals(password))
+        return usuarioRepository
+                .findByCorreoIgnoreCase(correo)
+                .filter(usuario ->
+                        usuario.getPassword().equals(password))
                 .orElse(null);
     }
 }
