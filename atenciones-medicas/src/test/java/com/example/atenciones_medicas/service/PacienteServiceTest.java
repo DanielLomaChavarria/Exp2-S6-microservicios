@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.DisplayName;
@@ -78,5 +79,61 @@ class PacienteServiceTest {
         // Assert
         assertTrue(resultado);
         verify(pacienteRepository).deleteById(1);
+    }
+
+    @Test
+    @DisplayName("Debe obtener todos los pacientes")
+    void obtenerPacientes_debeRetornarLista() {
+
+        // Arrange
+        Paciente paciente1 = new Paciente();
+        paciente1.setId(1);
+        paciente1.setNombre("Daniel");
+
+        Paciente paciente2 = new Paciente();
+        paciente2.setId(2);
+        paciente2.setNombre("Camila");
+
+        when(pacienteRepository.findAll())
+                .thenReturn(List.of(paciente1, paciente2));
+
+        // Act
+        List<Paciente> resultado =
+                pacienteService.obtenerPacientes();
+
+        // Assert
+        assertNotNull(resultado);
+        assertEquals(2, resultado.size());
+        assertEquals("Daniel", resultado.get(0).getNombre());
+        assertEquals("Camila", resultado.get(1).getNombre());
+    }
+
+    @Test
+    @DisplayName("Debe crear un paciente")
+    void crearPaciente_debeGuardarPaciente() {
+
+        // Arrange
+        Paciente paciente = new Paciente();
+        paciente.setId(1);
+        paciente.setNombre("Daniel");
+        paciente.setApellido("Loma");
+        paciente.setRut("11111111-1");
+        paciente.setEdad(30);
+        paciente.setTelefono("912345678");
+
+        when(pacienteRepository.save(paciente))
+                .thenReturn(paciente);
+
+        // Act
+        Paciente resultado =
+                pacienteService.crearPaciente(paciente);
+
+        // Assert
+        assertNotNull(resultado);
+        assertEquals(1, resultado.getId());
+        assertEquals("Daniel", resultado.getNombre());
+        assertEquals("Loma", resultado.getApellido());
+
+        verify(pacienteRepository).save(paciente);
     }
 }
